@@ -3,6 +3,7 @@ package com.sachin.ex.demoproj.controller;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sachin.ex.demoproj.client.FeignClient;
 import com.sachin.ex.demoproj.entities.UserEntity;
+import com.sachin.ex.demoproj.kafka.SendMessage;
 import com.sachin.ex.demoproj.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.Response;
@@ -22,6 +23,10 @@ public class MainController {
     AccountService accountService;
     @Autowired
     FeignClient client;
+
+    @Autowired
+    SendMessage message;
+
     @GetMapping("/account/{accno}")
     @Cacheable("cacheme")
     public ResponseEntity<String> validateAccNumber(@PathVariable Integer accno ){
@@ -41,6 +46,12 @@ public class MainController {
     @HystrixCommand(fallbackMethod = "defaultGreeting")
     public ResponseEntity<String> greet(){
         return  ResponseEntity.ok(client.getGreetings());
+    }
+
+    @GetMapping("/testKafka")
+    public String  testkafka(){
+        message.sendMessage("my-topic", "Hello! Sachin");
+        return "SENT!";
     }
     private String defaultGreeting() {
         return "Hello User!";
