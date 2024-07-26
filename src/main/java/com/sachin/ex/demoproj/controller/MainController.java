@@ -53,6 +53,8 @@ public class MainController {
         message.sendMessage("my-topic", "Hello! Sachin");
         return "SENT!";
     }
+
+
     private String defaultGreeting() {
         return "Hello User!";
     }

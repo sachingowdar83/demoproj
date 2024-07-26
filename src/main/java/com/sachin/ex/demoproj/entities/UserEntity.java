@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name="User")
@@ -22,6 +24,10 @@ public class UserEntity {
     private String name;
     private Integer age;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<UserApps> userApps;
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "laptop_id", referencedColumnName = "id")
+    private Laptops laptop;
 }
